@@ -15,8 +15,15 @@ public interface HotelDetailsService {
 //	Create Method
 	HotelDetails createHotel(HotelDetails hotelDetails);
 	
+//	update
+	HotelDetails updateHotel(int id, HotelDetails hotel);
+	
 //	Delete By Id Method
 	String deleteById(int id);
+	
+	
+//	Find By User Id
+	List<HotelDetails> findByUserId(int id);
 	
 }
 

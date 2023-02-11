@@ -14,10 +14,16 @@ public class GlobalExceptionHandler {
 
 	private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 	
+//	User Not Found Exception
+	
 	@ExceptionHandler(UserDetailsNotFoundException.class)
-	public ResponseEntity<Object> UserNotFound(UserDetailsNotFoundException ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+	public ResponseEntity<String> UserNotFound(UserDetailsNotFoundException ex) {
+		logger.error("UserDetailsNotFoundException Class | Exception Message : {} | Exception Cause : {}",ex.getMessage(),ex.getCause());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(ex.getMessage());
 	}
+	
+	
 	
 }
 

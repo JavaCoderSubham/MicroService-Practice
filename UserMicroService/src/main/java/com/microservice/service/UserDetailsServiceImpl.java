@@ -1,5 +1,6 @@
 package com.microservice.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.microservice.entity.HotelDetails;
 import com.microservice.entity.UserDetails;
 import com.microservice.exception.UserDetailsNotFoundException;
 import com.microservice.repository.UserDetailsRepository;
@@ -15,18 +18,38 @@ import com.microservice.repository.UserDetailsRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 	
+// Repository
 	@Autowired
-	private UserDetailsRepository repository;		// Repository
+	private UserDetailsRepository repository;		
 	
 //	Logger 
 	private final static Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
+//	RestTemplate
+	@Autowired
+	public RestTemplate restTemplate;
+	
+	
 //	Get All UserDetails Methods
 	@Override
 	public List<UserDetails> getAll() {
 		logger.info("getAll() -> | ");
 		List<UserDetails> user = repository.findAll();
 		logger.info("getAll() -> | User : {}",user);
+		
+		logger.info("Rest Template -> | ");
+		
+//		Using Rest Template Send Request for Hotel Details
+		
+		for(UserDetails userDetails : user) {
+			int userId = userDetails.getUserId();
+			logger.info("get User ID | id : {}",userId);
+			HotelDetails[] hotel = restTemplate.getForObject("http://localhost:8081/hotel/userid/"+userId, HotelDetails[].class);
+			List<HotelDetails> hotelDetails = Arrays.stream(hotel).toList();
+			logger.info("Get Hotels List | Hotels : {}",hotelDetails);
+			userDetails.setHotel(hotelDetails);
+		}
+		
 		return user;
 	}
 
