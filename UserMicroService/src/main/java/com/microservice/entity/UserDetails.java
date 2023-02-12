@@ -24,6 +24,7 @@ public class UserDetails {
 	private String email;
 	private String password;
 	private String address;
+	private String roles;
 	
 	@Transient
 	List<HotelDetails> Hotel = new ArrayList<>();

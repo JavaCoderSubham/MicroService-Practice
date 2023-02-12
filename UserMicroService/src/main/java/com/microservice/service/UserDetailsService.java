@@ -21,6 +21,9 @@ public interface UserDetailsService {
 //	delete UserDetails Methods
 	void deleteById(int id);
 	
+//	Delete All
+	void deleteAll();
+	
 }
 
 

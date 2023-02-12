@@ -59,6 +59,10 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		logger.info("getById() -> | id : {}" + id);
 		UserDetails user = repository.findById(id)
 				.orElseThrow(()-> new UserDetailsNotFoundException("User Details Not found : Id :" +id));
+		logger.info("RestTemplate -> ");
+		HotelDetails[] hotel = restTemplate.getForObject("http://localhost:8081/hotel/userid/"+user.getUserId(), HotelDetails[].class);
+		List<HotelDetails> hotelList = Arrays.stream(hotel).toList();
+		user.setHotel(hotelList);
 		logger.info("getById() -> | User : {}" + user);
 		return user;
 	}
@@ -110,6 +114,12 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		else
 			throw new UserDetailsNotFoundException("User Not Present Wrong id : "+id);
 		
+	}
+
+	@Override
+	public void deleteAll() {
+		logger.info("deleteAll() -> ");
+		repository.deleteAll();
 	}
 
 }

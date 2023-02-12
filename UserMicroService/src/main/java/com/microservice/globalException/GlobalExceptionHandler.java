@@ -1,5 +1,7 @@
 package com.microservice.globalException;
 
+import java.net.ConnectException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,13 @@ public class GlobalExceptionHandler {
 				.body(ex.getMessage());
 	}
 	
+	
+	@ExceptionHandler(ConnectException.class)
+	public ResponseEntity<String> microServiceConnection(ConnectException ex) {
+		logger.error("Connect Exception Class | Exception Message : {} | Exception Cause : {}",ex.getMessage(),ex.getCause());
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+				.body("Connection Problem With Your MicroServices");
+	}
 	
 	
 }

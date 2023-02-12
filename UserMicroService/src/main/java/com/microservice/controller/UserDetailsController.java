@@ -28,6 +28,7 @@ public class UserDetailsController {
 	
 	private final Logger logger = LoggerFactory.getLogger(UserDetailsController.class);
 	
+	
 	@GetMapping
 	public ResponseEntity<List<UserDetails>> getAllUser() {
 		logger.info("========== Start Get All ==========");
@@ -50,7 +51,7 @@ public class UserDetailsController {
 					.body(byId);
 	}
 	
-	@PostMapping
+	@PostMapping("/create")
 	public ResponseEntity<UserDetails> createUserDetails(@RequestBody UserDetails user) {
 		logger.info("========== Start Create User ==========");
 		logger.info("createUserDetails() -> | User : {}",user);
@@ -61,7 +62,7 @@ public class UserDetailsController {
 				.body(createUser);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<UserDetails> updateUserDetails(@PathVariable int id, @RequestBody UserDetails user) {
 		logger.info("========== Start Update User ==========");
 		logger.info("updateUserDetails() -> | id : {} | User : {}",id,user);
@@ -72,7 +73,7 @@ public class UserDetailsController {
 				.body(updateUser);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteByIDUserDetails(@PathVariable int id) {
 		logger.info("========== Start Delete By ID ==========");	
 		logger.info("deleteByIDUserDetails() -> | id : {}",id);
@@ -81,6 +82,15 @@ public class UserDetailsController {
 		logger.info("========== End Delete By ID ==========");		
 		return ResponseEntity.status(HttpStatus.ACCEPTED)
 				.body("Deleted... | User id : " + id);
+	}
+	
+	@DeleteMapping("/delete")
+	public ResponseEntity<String> deleteAll() {
+		logger.info("========== Start Delete All ==========");	
+		service.deleteAll();		
+		logger.info("========== End Delete All ==========");	
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body("All Deleted...");
 	}
 	
 }
