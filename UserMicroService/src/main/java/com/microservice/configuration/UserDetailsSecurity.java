@@ -27,7 +27,13 @@ public class UserDetailsSecurity {
 					.and()
 					.authorizeHttpRequests()
 					.requestMatchers("/user/**").authenticated()
-					.and().formLogin()
+					.and()
+					.authorizeHttpRequests()
+					.requestMatchers("/user/**").hasRole("ADMIN")
+					.and()
+					.authorizeHttpRequests()
+					.requestMatchers("/user/id/","/user/delete/id/").hasAnyRole("USER","ADMIN")
+					.and().httpBasic()
 					.and().logout()
 					.and().build();
 	}

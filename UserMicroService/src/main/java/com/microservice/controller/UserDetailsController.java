@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +29,10 @@ public class UserDetailsController {
 	
 	private final Logger logger = LoggerFactory.getLogger(UserDetailsController.class);
 	
+//	Get All With Hotel Details
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<List<UserDetails>> getAllUser() {
 		logger.info("========== Start Get All ==========");
 		logger.info("getAllUser() -> | ");
@@ -40,7 +43,10 @@ public class UserDetailsController {
 				.body(all);
 	}
 	
-	@GetMapping("/{id}")
+//	Get By Id With Hotel Details
+	
+	@GetMapping("/id/{id}")
+//	@PreAuthorize("hasAuthority('ROLE_USER')")
 	public ResponseEntity<UserDetails> getUserDetailsById(@PathVariable int id) {
 		logger.info("========== Start Get By ID ==========");
 		logger.info("getuserDetailsById() -> | id : {}",id);
@@ -50,6 +56,8 @@ public class UserDetailsController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED)
 					.body(byId);
 	}
+	
+//	Create
 	
 	@PostMapping("/create")
 	public ResponseEntity<UserDetails> createUserDetails(@RequestBody UserDetails user) {
@@ -62,7 +70,10 @@ public class UserDetailsController {
 				.body(createUser);
 	}
 	
+//	Update
+	
 	@PutMapping("/update/{id}")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<UserDetails> updateUserDetails(@PathVariable int id, @RequestBody UserDetails user) {
 		logger.info("========== Start Update User ==========");
 		logger.info("updateUserDetails() -> | id : {} | User : {}",id,user);
@@ -73,7 +84,10 @@ public class UserDetailsController {
 				.body(updateUser);
 	}
 	
-	@DeleteMapping("/delete/{id}")
+//	Delete By ID
+	
+	@DeleteMapping("/delete/id/{id}")
+//	@PreAuthorize("hasAuthority('ROLE_USER','ROLE_ADMIN')")
 	public ResponseEntity<String> deleteByIDUserDetails(@PathVariable int id) {
 		logger.info("========== Start Delete By ID ==========");	
 		logger.info("deleteByIDUserDetails() -> | id : {}",id);
@@ -84,7 +98,10 @@ public class UserDetailsController {
 				.body("Deleted... | User id : " + id);
 	}
 	
+//	Delete All
+	
 	@DeleteMapping("/delete")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteAll() {
 		logger.info("========== Start Delete All ==========");	
 		service.deleteAll();		

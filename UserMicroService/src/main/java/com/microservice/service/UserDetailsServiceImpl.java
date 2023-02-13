@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,18 +20,27 @@ import com.microservice.repository.UserDetailsRepository;
 public class UserDetailsServiceImpl implements UserDetailsService{
 	
 // Repository
+	
 	@Autowired
 	private UserDetailsRepository repository;		
 	
 //	Logger 
+	
 	private final static Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
 //	RestTemplate
+	
 	@Autowired
 	public RestTemplate restTemplate;
 	
+//	Password Encoder
 	
-//	Get All UserDetails Methods
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	
+//	Get All UserDetails With HotelDetails
+	
 	@Override
 	public List<UserDetails> getAll() {
 		logger.info("getAll() -> | ");
@@ -53,7 +63,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		return user;
 	}
 
-//	Get By ID UserDetails Methods
+//	Get By ID UserDetails With HotelDetails
+	
 	@Override
 	public UserDetails getById(int id) {
 		logger.info("getById() -> | id : {}" + id);
@@ -68,15 +79,19 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	}
 
 //	Create UserDetails Methods
+	
 	@Override
 	public UserDetails createUser(UserDetails user) {
 		logger.info("createUser() -> | User : {}" + user);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		logger.info("Password : Encode : {}",user.getPassword());
 		UserDetails save = repository.save(user);
 		logger.info("createUser() -> | User : {}" + save);
 		return save;
 	}
 
 //	Update UserDetails Methods
+	
 	@Override
 	public UserDetails updateUser(int id,UserDetails user) {
 		logger.info("updateUser() -> | id : {} | User : {}",id,user);
@@ -94,6 +109,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	}
 	
 //	Checking Id Present or Not
+	
 	private boolean isIdPresent(int id) {
 		logger.info("isIdPresent() -> | id : {}",id);
 		Optional<UserDetails> getUser = repository.findById(id);
@@ -103,6 +119,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	}
 
 //	Delete By Id Method
+	
 	@Override
 	public void deleteById(int id) {
 		logger.info("deleteById() -> | id : {}" + id);
@@ -115,6 +132,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			throw new UserDetailsNotFoundException("User Not Present Wrong id : "+id);
 		
 	}
+	
+//	Delete All
 
 	@Override
 	public void deleteAll() {
