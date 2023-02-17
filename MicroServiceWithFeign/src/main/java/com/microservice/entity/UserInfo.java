@@ -1,7 +1,7 @@
 package com.microservice.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ReviewDetails {
-
-	@Id
-	@GeneratedValue
-	private int reviewId;
-	private String userId;
-	private String hotelId;
-	private int rating;
-	private String feedback;
+public class UserInfo {
 	
+	@Id
+	private String userId;
+	private String name;
+	
+	@Column(unique = true)
+	private String email;
+	private String password;
+
 }

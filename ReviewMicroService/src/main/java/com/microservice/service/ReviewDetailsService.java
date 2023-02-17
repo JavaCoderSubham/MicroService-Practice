@@ -14,8 +14,8 @@ public interface ReviewDetailsService {
 	
 	ReviewDetails updateData(int id, ReviewDetails review);
 	
-	ReviewDetails deleteById(int id);
+	String deleteById(int id);
 	
-	ReviewDetails deleteAll();
+	String deleteAll();
 
 }

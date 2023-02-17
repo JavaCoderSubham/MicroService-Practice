@@ -4,42 +4,48 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.microservice.dto.ReviewDto;
 import com.microservice.entity.ReviewDetails;
-import com.microservice.repository.ReviewDetailsRepository;
 
 public class ReviewDetailsServiceImpl implements ReviewDetailsService{
 
 	@Autowired
-	private ReviewDetailsRepository repository;
+	private ReviewDto dto;
 	
 	@Override
 	public List<ReviewDetails> getAll() {
-		return null;
+		return dto.getAll();
 	}
 
 	@Override
 	public ReviewDetails getById(int id) {
-		return null;
+		return dto.getByIdReview(id);
 	}
 
 	@Override
 	public ReviewDetails createData(ReviewDetails review) {
-		return null;
+		return dto.createData(review);
 	}
 
 	@Override
 	public ReviewDetails updateData(int id, ReviewDetails review) {
-		return null;
+		
+		ReviewDetails reviewDetails = getById(id);
+		
+		reviewDetails.setRating(review.getRating());
+		reviewDetails.setFeedback(review.getFeedback());
+		
+		return dto.updateData(reviewDetails);
 	}
 
 	@Override
-	public ReviewDetails deleteById(int id) {
-		return null;
+	public String deleteById(int id) {
+		return dto.deleteByIdReview(id);
 	}
 
 	@Override
-	public ReviewDetails deleteAll() {
-		return null;
+	public String deleteAll() {
+		return dto.deleteAll();
 	}
 
 }
